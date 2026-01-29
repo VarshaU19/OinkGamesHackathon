@@ -2,6 +2,7 @@
 import pygame
 import math
 from character import *
+from platformTiles import *
 
 # pygame setup
 pygame.init()
@@ -10,9 +11,8 @@ screen = pygame.display.set_mode((1000, 900), pygame.RESIZABLE)
 pygame.display.set_caption('Platformer')
 clock = pygame.time.Clock()
 
-character_image = pygame.Surface((225, 225)).convert_alpha()
 user = character(150, 150)
-screen.blit(character_image, (150, 150))
+tiles, tiles_size = create_tile_map(screen.get_size(), 'assets/background1/tileset1/pinkcloudsheet.PNG')
 
 background1 = pygame.image.load('assets/background1/1.png')
 foreground1_1= pygame.image.load('assets/background1/2.png')
@@ -36,11 +36,14 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+            #scale background images to fit window size upon change
         elif event.type == pygame.VIDEORESIZE:
             screen = pygame.display.set_mode(event.size, pygame.RESIZABLE)
+            tiles, tiles_size = create_tile_map(screen.get_size(), 'assets/background1/tileset1/pinkcloudsheet.PNG')
             background1 = scale_background1()
             foreground1_1 = scale_foreground1_1()
             foreground1_2 = scale_foreground1_2()
+
 
     # flip() the display to put your work on screen
     screen.blit(background1, (0, 0))
@@ -51,7 +54,9 @@ while running:
     keys = pygame.key.get_pressed()
     
     dt = clock.tick(60)  # limits FPS to 60
-    user.update(keys, dt)
+    user.update(keys, dt) #update frames for character
+    tiles.update(dt) # update frames for tiles 
+    tiles.draw(screen) #draws tiles according to map on screen
 
     pygame.display.update()
 
