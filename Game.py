@@ -1,8 +1,10 @@
 # Example file showing a basic pygame "game loop"
+import random
 import pygame
 import math
 from character import *
 from platformTiles import *
+from cornPoints import Point
 
 # pygame setup
 pygame.init()
@@ -11,8 +13,12 @@ screen = pygame.display.set_mode((1000, 900), pygame.RESIZABLE)
 pygame.display.set_caption('Platformer')
 clock = pygame.time.Clock()
 
+screen_width = screen.get_width()
+
 user = character(150, 150)
 tiles, tiles_size = create_tile_map(screen.get_size(), 'assets/background1/tileset1/pinkcloudsheet.PNG')
+cornpoint = []
+cornpoint.append(Point(random.randint(0, screen_width - 100), -50))
 
 background1 = pygame.image.load('assets/background1/1.png')
 foreground1_1= pygame.image.load('assets/background1/2.png')
@@ -51,12 +57,23 @@ while running:
     screen.blit(foreground1_2, (0, 0))
 
     screen.blit(user.image, user.rect)
+
+    for point in cornpoint: 
+        if point.rect.colliderect(user):
+            cornpoint.remove(point)
+            new_point = random.randint(0, screen_width - 30)
+            cornpoint.append(Point(new_point, - 50))
+
     keys = pygame.key.get_pressed()
     
     dt = clock.tick(60)  # limits FPS to 60
     user.update(keys, dt) #update frames for character
     tiles.update(dt) # update frames for tiles 
     tiles.draw(screen) #draws tiles according to map on screen
+
+    for point in cornpoint:
+        point.update()
+        point.draw(screen)
 
     pygame.display.update()
 

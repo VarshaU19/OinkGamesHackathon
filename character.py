@@ -1,4 +1,5 @@
 import pygame
+import math
 
 class character(pygame.sprite.Sprite):
 
@@ -63,22 +64,18 @@ class character(pygame.sprite.Sprite):
         return frames
 
     def update(self, keys, dt):
-        self.walking = False
-
+        
         # Movement
         if keys[pygame.K_a]:
             self.rect.x -= 10
             self.facing_right = True
             self.walking = True
-
         if keys[pygame.K_d]:
             self.rect.x += 10
             self.facing_right = False
             self.walking = True
-
         if keys[pygame.K_w]:
             self.rect.y -= 10
-
         if keys[pygame.K_s]:
             self.rect.y += 10
 
@@ -97,5 +94,7 @@ class character(pygame.sprite.Sprite):
         self.animation_index %= len(frames)
         self.image = frames[self.animation_index]
 
+
         # Keep on screen
         self.rect.clamp_ip(pygame.display.get_surface().get_rect())
+

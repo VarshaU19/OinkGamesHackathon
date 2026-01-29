@@ -17,11 +17,7 @@ level_map = [
 MAP_WIDTH = len(level_map[0])
 MAP_HEIGHT = len(level_map)
 
-# --------------------
-# ANIMATED PLATFORM TILE
-# --------------------
-import pygame
-
+# build tiles
 class PlatformTile(pygame.sprite.Sprite):
     def __init__(self, x, y, sheet, tile_size, scale_factor=2.5): 
         ''' parameters: 
