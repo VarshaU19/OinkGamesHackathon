@@ -1,7 +1,8 @@
 # Example file showing a basic pygame "game loop"
-import random
 import pygame
 import math
+import sys
+import random
 from character import *
 from platformTiles import *
 from cornPoints import Point
@@ -14,6 +15,10 @@ pygame.display.set_caption('Platformer')
 clock = pygame.time.Clock()
 
 screen_width = screen.get_width()
+screen_height = screen.get_height()
+gravity = .5
+vel_y = 30
+cornpoint_y = 0
 
 user = character(150, 150)
 tiles, tiles_size = create_tile_map(screen.get_size(), 'assets/background1/tileset1/pinkcloudsheet.PNG')
@@ -50,7 +55,6 @@ while running:
             foreground1_1 = scale_foreground1_1()
             foreground1_2 = scale_foreground1_2()
 
-
     # flip() the display to put your work on screen
     screen.blit(background1, (0, 0))
     screen.blit(foreground1_1, (0, 0))
@@ -58,22 +62,25 @@ while running:
 
     screen.blit(user.image, user.rect)
 
-    for point in cornpoint: 
+    for point in cornpoint:
+        
+        cornpoint_y = cornpoint_y + vel_y
+        if cornpoint_y > screen_height:
+            cornpoint_y = -25
+
         if point.rect.colliderect(user):
             cornpoint.remove(point)
             new_point = random.randint(0, screen_width - 30)
             cornpoint.append(Point(new_point, - 50))
+        point.draw(screen)
+        
+    keys = pygame.key.get_pressed()      
 
-    keys = pygame.key.get_pressed()
-    
     dt = clock.tick(60)  # limits FPS to 60
     user.update(keys, dt) #update frames for character
     tiles.update(dt) # update frames for tiles 
+    
     tiles.draw(screen) #draws tiles according to map on screen
-
-    for point in cornpoint:
-        point.update()
-        point.draw(screen)
 
     pygame.display.update()
 

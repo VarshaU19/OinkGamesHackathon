@@ -65,6 +65,7 @@ class character(pygame.sprite.Sprite):
 
     def update(self, keys, dt):
         
+        keys = pygame.key.get_pressed()
         # Movement
         if keys[pygame.K_a]:
             self.rect.x -= 10
@@ -86,7 +87,7 @@ class character(pygame.sprite.Sprite):
             self.animation_index += 1
 
         # Choose animation set
-        if self.walking:
+        if self.walking == True:
             frames = self.walk_right if self.facing_right else self.walk_left
         else:
             frames = self.idle_right if self.facing_right else self.idle_left

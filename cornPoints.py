@@ -1,5 +1,7 @@
 import pygame
 import math
+import sys
+import random
 
 class Point():
 
@@ -12,14 +14,8 @@ class Point():
         self.width = 100
         self.height = 100 
 
-        self.y = 0
-        self.vel_y = 0
-        self.gravity = 0.5
-
-    def update(self):
-        self.vel_y += self.gravity
-        self.y += self.vel_y
-    
     def draw(self, screen):
         screen.blit(self.image_corn, self.rect)
+
+    
 
