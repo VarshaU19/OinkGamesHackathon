@@ -1,29 +1,26 @@
-# Example file showing a basic pygame "game loop"
 import pygame
 import math
 import sys
 import random
 from character import *
 from platformTiles import *
-from cornPoints import Point
+from cornPoints import *
 
 # pygame setup
 pygame.init()
 
-screen = pygame.display.set_mode((800, 800))
+screen = pygame.display.set_mode((800, 700))
 pygame.display.set_caption('Hungry Piggy')
 clock = pygame.time.Clock()
 
 screen_width = screen.get_width()
 screen_height = screen.get_height()
-gravity = .5
-vel_y = 30
-cornpoint_y = 0
 
 user = character(100, 100)
-clouds = platformClouds(80, 80)
+clouds = platformClouds(100, 100)
 cornpoint = []
-cornpoint.append(Point(random.randint(0, screen_width - 100), -100))
+cornpoint.append(Point(random.randint(0, screen_width -80), -80))
+score = 0 
 
 background1 = pygame.image.load('assets/background1/1.png')
 foreground1_1= pygame.image.load('assets/background1/2.png')
@@ -40,7 +37,6 @@ foreground1_1 = scale_foreground1_1()
 foreground1_2 = scale_foreground1_2()
 
 running = True
-
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -49,7 +45,7 @@ while running:
             running = False
             #scale background images to fit window size upon change
         elif event.type == pygame.VIDEORESIZE:
-            screen = pygame.display.set_mode((800, 800))
+            screen = pygame.display.set_mode((800, 700))
             background1 = scale_background1()
             foreground1_1 = scale_foreground1_1()
             foreground1_2 = scale_foreground1_2()
@@ -60,19 +56,22 @@ while running:
     screen.blit(foreground1_2, (0, 0))
 
     screen.blit(user.image, user.rect)
+    screen.blit(clouds.image, clouds.rect)
 
     for point in cornpoint:
-        
-        cornpoint_y = cornpoint_y + vel_y
-        if cornpoint_y > screen_height:
-            cornpoint_y = -125
-
-        if point.rect.colliderect(user):
+        point.update()
+        if point.rect.colliderect(user.rect): # when collision between user and corn
             cornpoint.remove(point)
-            new_point = random.randint(0, screen_width - 30)
-            cornpoint.append(Point(new_point, - 150))
-        point.draw(screen)
-        
+            score += 1
+            cornpoint.append(Point(random.randint(0, screen_width -80), -80))
+            print(score)
+
+        if point.rect.top > screen_height: # when corn falls past height of screen
+            cornpoint.remove(point)
+            cornpoint.append(Point(random.randint(0, screen_width -80), -80))
+
+        point.draw(screen)    
+
     keys = pygame.key.get_pressed()      
 
     dt = clock.tick(60)  # limits FPS to 60
