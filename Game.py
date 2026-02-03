@@ -10,7 +10,7 @@ from cornPoints import Point
 # pygame setup
 pygame.init()
 
-screen = pygame.display.set_mode((1000, 900), pygame.RESIZABLE)
+screen = pygame.display.set_mode((800, 800))
 pygame.display.set_caption('Platformer')
 clock = pygame.time.Clock()
 
@@ -21,9 +21,8 @@ vel_y = 30
 cornpoint_y = 0
 
 user = character(150, 150)
-tiles, tiles_size = create_tile_map(screen.get_size(), 'assets/background1/tileset1/pinkcloudsheet.PNG')
 cornpoint = []
-cornpoint.append(Point(random.randint(0, screen_width - 100), -50))
+cornpoint.append(Point(random.randint(0, screen_width - 100), -100))
 
 background1 = pygame.image.load('assets/background1/1.png')
 foreground1_1= pygame.image.load('assets/background1/2.png')
@@ -49,8 +48,7 @@ while running:
             running = False
             #scale background images to fit window size upon change
         elif event.type == pygame.VIDEORESIZE:
-            screen = pygame.display.set_mode(event.size, pygame.RESIZABLE)
-            tiles, tiles_size = create_tile_map(screen.get_size(), 'assets/background1/tileset1/pinkcloudsheet.PNG')
+            screen = pygame.display.set_mode((800, 800))
             background1 = scale_background1()
             foreground1_1 = scale_foreground1_1()
             foreground1_2 = scale_foreground1_2()
@@ -66,21 +64,18 @@ while running:
         
         cornpoint_y = cornpoint_y + vel_y
         if cornpoint_y > screen_height:
-            cornpoint_y = -25
+            cornpoint_y = -125
 
         if point.rect.colliderect(user):
             cornpoint.remove(point)
             new_point = random.randint(0, screen_width - 30)
-            cornpoint.append(Point(new_point, - 50))
+            cornpoint.append(Point(new_point, - 150))
         point.draw(screen)
         
     keys = pygame.key.get_pressed()      
 
     dt = clock.tick(60)  # limits FPS to 60
     user.update(keys, dt) #update frames for character
-    tiles.update(dt) # update frames for tiles 
-    
-    tiles.draw(screen) #draws tiles according to map on screen
 
     pygame.display.update()
 

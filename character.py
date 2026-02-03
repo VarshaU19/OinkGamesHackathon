@@ -11,17 +11,17 @@ class character(pygame.sprite.Sprite):
             'assets/characters/idle.PNG'
         ).convert_alpha()
 
-        self.walk_sheet = pygame.image.load(
-            'assets/characters/walking.PNG'
+        self.run_sheet = pygame.image.load(
+            'assets/characters/pigRun.PNG'
         ).convert_alpha()
 
         # Frame sizes
-        self.frame_width = 150
-        self.frame_height = 150
+        self.frame_width = 100
+        self.frame_height = 100
 
         # Load frames
         self.idle_frames = self.load_frames(self.idle_sheet, 2)
-        self.walk_frames = self.load_frames(self.walk_sheet, 4)
+        self.run_frames = self.load_frames(self.run_sheet, 3)
 
         # Scale frames
         self.idle_frames = [
@@ -29,21 +29,21 @@ class character(pygame.sprite.Sprite):
             for frame in self.idle_frames
         ]
 
-        self.walk_frames = [
+        self.run_frames = [
             pygame.transform.scale(frame, (105, 105))
-            for frame in self.walk_frames
+            for frame in self.run_frames
         ]
 
         # Flip frames
         self.idle_left = [pygame.transform.flip(f, True, False) for f in self.idle_frames]
-        self.walk_left = [pygame.transform.flip(f, True, False) for f in self.walk_frames]
+        self.run_left = [pygame.transform.flip(f, True, False) for f in self.run_frames]
 
         self.idle_right = self.idle_frames
-        self.walk_right = self.walk_frames
+        self.run_right = self.run_frames
 
         # State
         self.facing_right = True
-        self.walking = False
+        self.running = False
 
         # Animation
         self.animation_index = 0
@@ -70,11 +70,11 @@ class character(pygame.sprite.Sprite):
         if keys[pygame.K_a]:
             self.rect.x -= 10
             self.facing_right = True
-            self.walking = True
+            self.running = True
         if keys[pygame.K_d]:
             self.rect.x += 10
             self.facing_right = False
-            self.walking = True
+            self.running = True
         if keys[pygame.K_w]:
             self.rect.y -= 10
         if keys[pygame.K_s]:
@@ -87,8 +87,8 @@ class character(pygame.sprite.Sprite):
             self.animation_index += 1
 
         # Choose animation set
-        if self.walking == True:
-            frames = self.walk_right if self.facing_right else self.walk_left
+        if self.running == True:
+            frames = self.run_right if self.facing_right else self.run_left
         else:
             frames = self.idle_right if self.facing_right else self.idle_left
 
