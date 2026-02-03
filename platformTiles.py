@@ -22,25 +22,20 @@ class platformClouds(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
 
-        self.cloudsheet = pygame.image.load('assets/background1/tileset1/pinkcloudsheet.PNG').convert_alpha()
+        tile_spritesheet = pygame.image.load('assets/background1/tileset1/pinkcloudsheet.PNG').convert_alpha()
 
         # frame dimensions
-        self.frame_width = 150
-        self.frame_height = 150 
+        self.frame_width = 80
+        self.frame_height = 80 
 
         # load frames
-        self.spritesheet_frames = self.load_frames(self.cloudsheet, 2)
-
-        self.cloud_frames = [
-            pygame.transform.scale(frame, (100, 100)) for frame in self.cloud_frames
-        ]
+        self.spritesheet_frames = self.load_frames(tile_spritesheet, 2)
 
         self.animation_index = 0
         self.animation_timer = 0
         self.animation_speed = 0.5
 
-        self.cloud = self.cloudsheet[0]
-        self.rect = self.cloudsheet.get_rect(center=(x, y))
+        self.rect = tile_spritesheet.get_rect(center=(x, y))
 
     def load_frames(self, sheet, num_frames):
         frames = []
@@ -60,7 +55,7 @@ class platformClouds(pygame.sprite.Sprite):
 
         self.rect.clamp_ip(pygame.display.get_surface().get_rect())
 
-    def create_tilemap(screen_size):
+    def create_tilemap(screen_size, tile_spritesheet):
         screen_width = 800
         screen_height = 800
 
@@ -69,5 +64,16 @@ class platformClouds(pygame.sprite.Sprite):
             screen_width / tilemap_width
         )
 
-        
+        offset_x = (screen_width - tilemap_width)
+        offset_y = (screen_height - tilemap_height)
 
+        tile_group = pygame.sprite.Group()
+        tilesheet = pygame.image.load(tile_spritesheet).convert_alpha()
+        for row_index, row in enumerate(tilemap):
+            for col_index, col in enumerate(row):
+                if col == '#':
+                    x = offset_x + col_index
+                    y = offset_y + row_index
+
+                    tile_group.add(platformClouds(x, y, tilesheet, tile_size))
+        return tile_group

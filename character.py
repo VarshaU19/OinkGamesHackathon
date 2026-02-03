@@ -25,12 +25,12 @@ class character(pygame.sprite.Sprite):
 
         # Scale frames
         self.idle_frames = [
-            pygame.transform.scale(frame, (105, 105))
+            pygame.transform.scale(frame, (85, 85))
             for frame in self.idle_frames
         ]
 
         self.run_frames = [
-            pygame.transform.scale(frame, (105, 105))
+            pygame.transform.scale(frame, (85, 85))
             for frame in self.run_frames
         ]
 

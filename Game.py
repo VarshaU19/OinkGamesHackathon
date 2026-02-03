@@ -11,7 +11,7 @@ from cornPoints import Point
 pygame.init()
 
 screen = pygame.display.set_mode((800, 800))
-pygame.display.set_caption('Platformer')
+pygame.display.set_caption('Hungry Piggy')
 clock = pygame.time.Clock()
 
 screen_width = screen.get_width()
@@ -20,7 +20,8 @@ gravity = .5
 vel_y = 30
 cornpoint_y = 0
 
-user = character(150, 150)
+user = character(100, 100)
+clouds = platformClouds(80, 80)
 cornpoint = []
 cornpoint.append(Point(random.randint(0, screen_width - 100), -100))
 
@@ -76,6 +77,7 @@ while running:
 
     dt = clock.tick(60)  # limits FPS to 60
     user.update(keys, dt) #update frames for character
+    clouds.update(dt)
 
     pygame.display.update()
 
