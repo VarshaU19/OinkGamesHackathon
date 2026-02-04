@@ -22,7 +22,7 @@ user = character(100, 100)
 cornpoint = []
 cornpoint.append(Point(random.randint(0, screen_width -80), -80))
 score = 0
-font = pygame.font.SysFont('mv boli', 40)
+font = pygame.font.SysFont('mv boli', 40) # import font module to write on screen using font style and font size; already in system
 
 background1 = pygame.image.load('assets/background1/1.png')
 foreground1_1= pygame.image.load('assets/background1/2.png')
@@ -52,14 +52,14 @@ while running:
             foreground1_1 = scale_foreground1_1()
             foreground1_2 = scale_foreground1_2()
 
-    # flip() the display to put your work on screen
+    # draws background images on screen in descending order
     screen.blit(background1, (0, 0))
     screen.blit(foreground1_1, (0, 0))
     screen.blit(foreground1_2, (0, 0))
 
-    screen.blit(user.image, user.rect)
-    score_text = font.render(f"Score: {score}", False, "white", None)
-    screen.blit(score_text, (20, 10))
+    screen.blit(user.image, user.rect) # draw user with frames and rect
+    score_text = font.render(f"Score: {score}", False, "white", None) # initialize score text with text, antialias, color, background
+    screen.blit(score_text, (20, 10)) # draw score tracker on screen
 
     for point in cornpoint:
         point.update()
@@ -84,8 +84,8 @@ while running:
 
     dt = clock.tick(60)  # limits FPS to 60
     user.update(keys, dt) #update frames for character
-    tiles.update(dt)
-    tiles.draw(screen)
+    tiles.update(dt) # updates tiles with the animation speed
+    tiles.draw(screen) # draws the tiles on the screen 
+    
     pygame.display.update()
-
 pygame.quit()
