@@ -47,6 +47,8 @@ class character(pygame.sprite.Sprite):
         # State
         self.facing_right = True
         self.running = False
+        self.isJumping = False
+        self.jumpCount = 10
 
         # Animation
         self.animation_index = 0
@@ -66,6 +68,11 @@ class character(pygame.sprite.Sprite):
             frames.append(frame)
         return frames
 
+    def jump(self, ):
+        if self.isJumping:
+            if self.jumpCount >= -10:
+                pass
+
     def update(self, keys, dt):
         
         self.vel_y += self.gravity
@@ -83,7 +90,7 @@ class character(pygame.sprite.Sprite):
             self.running = True
         if keys[pygame.K_SPACE]:
             self.rect.y += 10
-            self.gravity += 3
+            self.gravity -= .4
 
         # Animation timer
         self.animation_timer += dt / 1000

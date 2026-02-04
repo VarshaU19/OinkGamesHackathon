@@ -27,11 +27,13 @@ class platformClouds(pygame.sprite.Sprite):
         self.image = self.frames[0]
         self.rect = self.image.get_rect(topleft=(x, y))
 
+        self.hit = self.rect.inflate(-10, -70)        
+
     def load_frames(self, sheet):
         frames = []
 
         frame_width = 100
-        frame_height = 100
+        frame_height = 75
 
         sheet_width, sheet_height = sheet.get_size()
         num_frames = sheet_width // frame_width

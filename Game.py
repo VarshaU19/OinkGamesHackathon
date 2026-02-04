@@ -75,13 +75,17 @@ while running:
 
         point.draw(screen) 
 
-    keys = pygame.key.get_pressed()      
+    for cloud in tiles:
+        if user.rect.colliderect(cloud.hit):
+            user.vel_y = 0
+            user.y = 0
+
+    keys = pygame.key.get_pressed()  
 
     dt = clock.tick(60)  # limits FPS to 60
     user.update(keys, dt) #update frames for character
     tiles.update(dt)
     tiles.draw(screen)
-
     pygame.display.update()
 
 pygame.quit()
