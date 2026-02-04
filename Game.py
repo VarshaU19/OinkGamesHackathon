@@ -10,6 +10,8 @@ from cornPoints import *
 pygame.init()
 
 screen = pygame.display.set_mode((800, 700))
+tiles = create_tile_map('assets/background1/tileset1/pinkcloudsheet.PNG', 100)
+
 pygame.display.set_caption('Hungry Piggy')
 clock = pygame.time.Clock()
 
@@ -17,10 +19,10 @@ screen_width = screen.get_width()
 screen_height = screen.get_height()
 
 user = character(100, 100)
-clouds = platformClouds(100, 100)
 cornpoint = []
 cornpoint.append(Point(random.randint(0, screen_width -80), -80))
-score = 0 
+score = 0
+font = pygame.font.SysFont('mv boli', 40)
 
 background1 = pygame.image.load('assets/background1/1.png')
 foreground1_1= pygame.image.load('assets/background1/2.png')
@@ -56,11 +58,12 @@ while running:
     screen.blit(foreground1_2, (0, 0))
 
     screen.blit(user.image, user.rect)
-    screen.blit(clouds.image, clouds.rect)
+    score_text = font.render(f"Score: {score}", False, "white", None)
+    screen.blit(score_text, (20, 10))
 
     for point in cornpoint:
         point.update()
-        if point.rect.colliderect(user.rect): # when collision between user and corn
+        if point.rect.colliderect(user): # when collision between user and corn
             cornpoint.remove(point)
             score += 1
             cornpoint.append(Point(random.randint(0, screen_width -80), -80))
@@ -70,13 +73,14 @@ while running:
             cornpoint.remove(point)
             cornpoint.append(Point(random.randint(0, screen_width -80), -80))
 
-        point.draw(screen)    
+        point.draw(screen) 
 
     keys = pygame.key.get_pressed()      
 
     dt = clock.tick(60)  # limits FPS to 60
     user.update(keys, dt) #update frames for character
-    clouds.update(dt)
+    tiles.update(dt)
+    tiles.draw(screen)
 
     pygame.display.update()
 

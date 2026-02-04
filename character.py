@@ -19,6 +19,9 @@ class character(pygame.sprite.Sprite):
         self.frame_width = 100
         self.frame_height = 100
 
+        self.vel_y = 0
+        self.gravity = 0.3
+
         # Load frames
         self.idle_frames = self.load_frames(self.idle_sheet, 2)
         self.run_frames = self.load_frames(self.run_sheet, 3)
@@ -65,6 +68,9 @@ class character(pygame.sprite.Sprite):
 
     def update(self, keys, dt):
         
+        self.vel_y += self.gravity
+        self.rect.y += self.vel_y
+
         keys = pygame.key.get_pressed()
         # Movement
         if keys[pygame.K_a]:
@@ -75,10 +81,9 @@ class character(pygame.sprite.Sprite):
             self.rect.x += 10
             self.facing_right = False
             self.running = True
-        if keys[pygame.K_w]:
-            self.rect.y -= 10
-        if keys[pygame.K_s]:
+        if keys[pygame.K_SPACE]:
             self.rect.y += 10
+            self.gravity += 3
 
         # Animation timer
         self.animation_timer += dt / 1000
@@ -94,7 +99,6 @@ class character(pygame.sprite.Sprite):
 
         self.animation_index %= len(frames)
         self.image = frames[self.animation_index]
-
 
         # Keep on screen
         self.rect.clamp_ip(pygame.display.get_surface().get_rect())
