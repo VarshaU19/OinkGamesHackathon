@@ -1,4 +1,5 @@
 import pygame
+from platformTiles import *
 import math
 
 class character(pygame.sprite.Sprite):
@@ -20,6 +21,7 @@ class character(pygame.sprite.Sprite):
         self.frame_height = 100
 
         self.vel_y = 0
+        self.vel_x = 0
         self.gravity = 0.3
 
         # Load frames
@@ -47,8 +49,6 @@ class character(pygame.sprite.Sprite):
         # State
         self.facing_right = True
         self.running = False
-        self.isJumping = False
-        self.jumpCount = 10
 
         # Animation
         self.animation_index = 0
@@ -68,10 +68,10 @@ class character(pygame.sprite.Sprite):
             frames.append(frame)
         return frames
 
-    def jump(self, ):
-        if self.isJumping:
-            if self.jumpCount >= -10:
-                pass
+    def jump(self):
+        landing = pygame.sprite.spritecollide(self, platformClouds(tile_group), False)
+        if landing:
+            self.vel_y = -15
 
     def update(self, keys, dt):
         
@@ -89,8 +89,7 @@ class character(pygame.sprite.Sprite):
             self.facing_right = False
             self.running = True
         if keys[pygame.K_SPACE]:
-            self.rect.y += 10
-            self.gravity -= .4
+            self.jump()
 
         # Animation timer
         self.animation_timer += dt / 1000
