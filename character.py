@@ -22,7 +22,7 @@ class character(pygame.sprite.Sprite):
 
         self.vel_y = 0
         self.vel_x = 0
-        self.gravity = 0.3
+        self.gravity = 1
 
         # Load frames
         self.idle_frames = self.load_frames(self.idle_sheet, 2)
@@ -49,6 +49,8 @@ class character(pygame.sprite.Sprite):
         # State
         self.facing_right = True
         self.running = False
+        self.jumpCount = 0
+        self.fallCount = 0
 
         # Animation
         self.animation_index = 0
@@ -59,6 +61,14 @@ class character(pygame.sprite.Sprite):
         self.image = self.idle_right[0]
         self.rect = self.image.get_rect(center=(x, y))
 
+    def jumping(self):
+        self.vel_y = -self.gravity * 15
+        self.aniamtion_index = 0
+        self.jumpCount += 1
+        if self.jumpCount == 1:
+            self.fallCount = 0 
+        print(self.jumpCount)
+
     def load_frames(self, sheet, num_frames):
         frames = []
         for i in range(num_frames):
@@ -68,28 +78,20 @@ class character(pygame.sprite.Sprite):
             frames.append(frame)
         return frames
 
-    def jump(self):
-        landing = pygame.sprite.spritecollide(self, platformClouds(tile_group), False)
-        if landing:
-            self.vel_y = -15
-
     def update(self, keys, dt):
-        
         self.vel_y += self.gravity
         self.rect.y += self.vel_y
 
         keys = pygame.key.get_pressed()
         # Movement
-        if keys[pygame.K_a]:
+        if keys[pygame.K_a] or keys[pygame.K_RIGHT]:
             self.rect.x -= 10
             self.facing_right = True
             self.running = True
-        if keys[pygame.K_d]:
+        if keys[pygame.K_d] or keys[pygame.K_LEFT]:
             self.rect.x += 10
             self.facing_right = False
             self.running = True
-        if keys[pygame.K_SPACE]:
-            self.jump()
 
         # Animation timer
         self.animation_timer += dt / 1000
@@ -108,4 +110,3 @@ class character(pygame.sprite.Sprite):
 
         # Keep on screen
         self.rect.clamp_ip(pygame.display.get_surface().get_rect())
-

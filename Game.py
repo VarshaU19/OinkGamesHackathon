@@ -38,6 +38,11 @@ background1 = scale_background1()
 foreground1_1 = scale_foreground1_1()
 foreground1_2 = scale_foreground1_2()
 
+def handle_collision():
+    for cloud in tiles:
+        if user.rect.colliderect(cloud.rect):
+            user.rect.bottom = cloud.rect.top
+
 running = True
 while running:
     # poll for events
@@ -51,6 +56,9 @@ while running:
             background1 = scale_background1()
             foreground1_1 = scale_foreground1_1()
             foreground1_2 = scale_foreground1_2()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and user.jumpCount < 2:
+                user.jumping()
 
     # draws background images on screen in descending order
     screen.blit(background1, (0, 0))
@@ -73,12 +81,11 @@ while running:
             cornpoint.remove(point)
             cornpoint.append(Point(random.randint(0, screen_width -80), -80))
 
-        point.draw(screen) 
+        point.draw(screen)
 
-    for cloud in tiles:
-        if user.rect.colliderect(cloud.hit):
-            user.vel_y = 0
-            user.y = 0
+        for cloud in tiles:
+            cloud.hit = cloud.rect.inflate(-10, -70)
+            pygame.draw.rect(screen, 'red', cloud.rect, 1)
 
     keys = pygame.key.get_pressed()  
 

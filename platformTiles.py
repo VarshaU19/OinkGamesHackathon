@@ -11,8 +11,8 @@ level_map = [
     "#.#..#.##",
     ".#.#..#..",
 ]
-MAP_WIDTH = 800
-MAP_HEIGHT = 400
+map_width = 800
+map_height = 400
 # build tiles
 class platformClouds(pygame.sprite.Sprite):
     def __init__(self, x, y, sheet):
@@ -25,9 +25,9 @@ class platformClouds(pygame.sprite.Sprite):
         self.animation_timer = 0
 
         self.image = self.frames[0]
-        self.rect = self.image.get_rect(topleft=(x, y))
+        self.rect = self.image.get_rect(topleft=(x, y))   
 
-        self.hit = self.rect.inflate(-10, -70)        
+        self.rect.clamp_ip(pygame.display.get_surface().get_rect())
 
     def load_frames(self, sheet):
         frames = []
@@ -55,8 +55,8 @@ class platformClouds(pygame.sprite.Sprite):
 
     tile_size = 100
 
-    MAP_WIDTH = len(level_map[0])
-    MAP_HEIGHT = len(level_map)
+    map_width= len(level_map[0])
+    map_height = len(level_map)
 
 def create_tile_map(sheet, tile_size):
     tile_group = pygame.sprite.Group()
@@ -69,4 +69,4 @@ def create_tile_map(sheet, tile_size):
                 y = row_index * tile_size
                 tile_group.add(platformClouds(x, y, sheet))
 
-    return tile_group
+    return tile_group 
