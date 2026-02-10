@@ -4,7 +4,7 @@ class Point(pygame.sprite.Sprite):
 
     def __init__(self, x, y):
         super().__init__()
-        self.image_corn = pygame.image.load('assets/points/corn.png').convert_alpha()
+        self.image_corn = pygame.image.load('assets/points/corn.PNG').convert_alpha()
         
         self.image_corn = pygame.transform.scale(self.image_corn, (80, 80))
         self.rect = self.image_corn.get_rect(topleft=(x, y)) # position of corn

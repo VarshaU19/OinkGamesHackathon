@@ -1,46 +1,27 @@
 import pygame
-# --------------------
-# LEVEL MAP
-# --------------------
-level_map = [
-    ".........",
-    ".........",
-    ".........",
-    "##.#..#..",
-    ".#.##..#.",
-    "#.#..#.##",
-    ".#.#..#..",
-]
-map_width = 800
-map_height = 400
-# build tiles
+
 class platformClouds(pygame.sprite.Sprite):
-    def __init__(self, x, y, sheet):
+    def __init__(self, x, y):
         super().__init__()
+        self.sheet = pygame.image.load("assets/background1/tileset1/pinkcloudsheet.png").convert_alpha()
+        self.frame_width = 100
+        self.frame_height = 48
 
-        self.frames = self.load_frames(sheet)
+        self.frames = self.load_frames()
+        self.image = self.frames[0]
+        self.rect = self.sheet.get_rect(topleft=(x, y))
 
+        self.animation_speed = 0.5
         self.animation_index = 0
-        self.animation_speed = 0.3
         self.animation_timer = 0
 
-        self.image = self.frames[0]
-        self.rect = self.image.get_rect(topleft=(x, y))   
-
-        self.rect.clamp_ip(pygame.display.get_surface().get_rect())
-
-    def load_frames(self, sheet):
+    def load_frames(self):
         frames = []
-
-        frame_width = 100
-        frame_height = 75
-
-        sheet_width, sheet_height = sheet.get_size()
-        num_frames = sheet_width // frame_width
-
+        self.sheet_width = 200
+        num_frames = self.sheet_width // self.frame_width 
         for i in range(num_frames):
-            frame = sheet.subsurface(
-                (i * frame_width, 0, frame_width, frame_height)
+            frame = self.sheet.subsurface(
+                (i * self.frame_width, 0, self.frame_width, self.frame_height)
             ).copy()
             frames.append(frame)
 
@@ -50,23 +31,9 @@ class platformClouds(pygame.sprite.Sprite):
         self.animation_timer += dt / 1000
         if self.animation_timer >= self.animation_speed:
             self.animation_timer = 0
-            self.animation_index = (self.animation_index + 1) % len(self.frames)
+            self.animation_index += 1
+            self.animation_index %= len(self.frames)
             self.image = self.frames[self.animation_index]
 
-    tile_size = 100
 
-    map_width= len(level_map[0])
-    map_height = len(level_map)
 
-def create_tile_map(sheet, tile_size):
-    tile_group = pygame.sprite.Group()
-    sheet = pygame.image.load(sheet).convert_alpha()
-
-    for row_index, row in enumerate(level_map):
-        for col_index, tile in enumerate(row):
-            if tile == "#":
-                x = col_index * tile_size
-                y = row_index * tile_size
-                tile_group.add(platformClouds(x, y, sheet))
-
-    return tile_group 

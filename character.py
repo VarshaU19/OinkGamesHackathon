@@ -9,7 +9,7 @@ class character(pygame.sprite.Sprite):
 
         # Load sprite sheets
         self.idle_sheet = pygame.image.load(
-            'assets/characters/idle.PNG'
+            'assets/characters/pigIdle.PNG'
         ).convert_alpha()
 
         self.run_sheet = pygame.image.load(
@@ -18,7 +18,7 @@ class character(pygame.sprite.Sprite):
 
         # Frame sizes
         self.frame_width = 100
-        self.frame_height = 100
+        self.frame_height = 72
 
         self.vel_y = 0
         self.vel_x = 0
@@ -30,12 +30,12 @@ class character(pygame.sprite.Sprite):
 
         # Scale frames
         self.idle_frames = [
-            pygame.transform.scale(frame, (85, 85))
+            pygame.transform.scale(frame, (85, 72))
             for frame in self.idle_frames
         ]
 
         self.run_frames = [
-            pygame.transform.scale(frame, (85, 85))
+            pygame.transform.scale(frame, (85, 72))
             for frame in self.run_frames
         ]
 
@@ -62,12 +62,11 @@ class character(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=(x, y))
 
     def jumping(self):
-        self.vel_y = -self.gravity * 15
+        self.vel_y = -self.gravity * 18
         self.aniamtion_index = 0
         self.jumpCount += 1
         if self.jumpCount == 1:
             self.fallCount = 0 
-        print(self.jumpCount)
 
     def load_frames(self, sheet, num_frames):
         frames = []
